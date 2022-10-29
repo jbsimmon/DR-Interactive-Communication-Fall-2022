@@ -1,6 +1,7 @@
 import json
 import requests
 import gensim.downloader as api
+from flask import Flask
 print("load wv")
 wv = api.load('word2vec-google-news-300')
 print("wv loaded")
@@ -46,7 +47,7 @@ def process(text):
     global OBJ_LIST
 
     OP = ["create", "delete"]
-    TYPE = ["Chicken", "Cow", "Duck", "Pig", "Sheep"]
+    TYPE = ["chicken", "cow", "duck", "pig", "sheep"]
 
     create_list = []
     delete_list = []
@@ -103,8 +104,13 @@ def process(text):
     rt = json.dumps({"Text": text, "Object": {"Create": create_list, "Delete": delete_list}})
     return rt
 
+app = Flask(__name__)
+@app.route('/<name>')
+def idx(name):
+
+    return process(name)
 
 if __name__ == '__main__':
-    # app.run()
-    print(process("give me a hen and an ox"))
-    print(process("delete cow"))
+    app.run()
+    # print(process("give me a hen and an ox"))
+    # print(process("delete cow"))
