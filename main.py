@@ -1,4 +1,4 @@
-from flask import Flask
+ort Flask
 import json
 import requests
 import gensim.downloader as api
@@ -157,7 +157,8 @@ module_path = "universal-sentence-encoder_4"
 sim_model = hub.load(module_path)
 
 # sets of options
-types = ["sphere ball", "cube box", "cylinder can", "capsule pill"]
+# types = ["sphere ball", "cube box", "cylinder can", "capsule pill"]
+types = ["chicken", "cow", "duck", "pig", "sheep"]
 colors = ["black", "blue", "cyan", "gray", "green", "magenta", "red", "white", "yellow"]
 sizes = ["small tiny mini", "medium standard normal", "large huge big"]
 locations = ["far", "close", "front", "back", "right", "left", "high", "low"]
@@ -229,7 +230,8 @@ def num_process(text):
         i += 2
 
     distance = (60.0 + (location_arr[0] * 60) ** 1.6 - (location_arr[1] * 60) ** 1.6) / 6.0
-    height = (3.0 + (distance * location_arr[6] * 3) - (distance * location_arr[7] * 3))
+    # height = (3.0 + (distance * location_arr[6] * 3) - (distance * location_arr[7] * 3))
+    height = (3.0 + (distance * location_arr[6] * 3) - (distance * location_arr[7] * 3)) / 3.0
 
     x = distance * (0.0 + (location_arr[2] * 40) ** 1.6 - (location_arr[3] * 40) ** 1.6) / 6.0
     z = distance * (0.0 + (location_arr[4] * 40) ** 1.6 - (location_arr[5] * 40) ** 1.6) / 6.0
@@ -237,7 +239,6 @@ def num_process(text):
 
     new_location = [height, distance, direction]
 
-    print(x, " ", z, " :", direction, " d+ ", distance)
     create_list.append({"Name": "object1", "Type": new_type, "Color": sentences[type_upper_bound + color_idx],
                         "Size": size_calc, "Location": new_location})
 
@@ -259,8 +260,8 @@ def idx(name):
         top_k=50,
     )
     response = tokenizer.decode(results[0], skip_special_tokens=True)
-    return process(response) if name[0] == '0' else num_process(response)
-
+    return num_process(name[1:]) if name[0] == '0' else num_process(response)
+    # return process(response) if name[0] == '0' else num_process(response)
 
 if __name__ == '__main__':
     app.run()
